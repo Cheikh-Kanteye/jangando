@@ -9,7 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ['username' => 'teacher', 'password' => password_hash('teacher_password', PASSWORD_DEFAULT), 'role' => 'teacher'],
     ['username' => 'admin', 'password' => password_hash('admin_password', PASSWORD_DEFAULT), 'role' => 'admin'],
     ['username' => 'student', 'password' => password_hash('student_password', PASSWORD_DEFAULT), 'role' => 'student'],
-    // Add more users as needed
   ];
 
   $user = null;

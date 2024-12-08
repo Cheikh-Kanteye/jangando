@@ -9,7 +9,7 @@
         <span class="hours"><?= $subject["heures"] ?> hours</span>
       </div>
     <?php endforeach ?>
-    <div class="card center">
+    <div class="card center" id="add-btn">
       <div class="card-icon"><i class="ri-add-fill"></i></div>
     </div>
   </div>

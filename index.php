@@ -2,7 +2,7 @@
 // Start the session at the very beginning of your script
 session_start();
 
-require_once './app/models.php';
+require_once './database/models.php';
 require_once "./database/db.php";
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -24,7 +24,6 @@ switch ($requestUri) {
     break;
 
   case '/students':
-    $students = getAllStudents();
     $app_content = './app/views/students.php';
     break;
 
@@ -33,54 +32,44 @@ switch ($requestUri) {
     break;
 
   case '/parents':
-    $parents = getAllParents();
     $app_content = './app/views/parents.php';
     break;
 
   case '/subjects':
-    $subjects = getAllSubjects();
     $app_content = './app/views/subjects.php';
     break;
 
   case '/classes':
-    $classes = getAllClasses();
     $app_content = './app/views/classes.php';
     break;
 
   case '/lessons':
-    $lessons = getAllLessons();
     $app_content = './app/views/lessons.php';
     break;
 
   case '/exams':
     $type = "Exams";
-    $evaluations = getAllEvaluations("examen");
     $app_content = './app/views/evaluations.php';
     break;
 
   case '/assignments':
     $type = "Assignements";
-    $evaluations = getAllEvaluations("devoir");
     $app_content = './app/views/evaluations.php';
     break;
 
   case '/results':
-    $results = getAllResults();
     $app_content = './app/views/results.php';
     break;
 
   case '/attendance':
-    $attendances = getAttendanceRecords();
     $app_content = './app/views/attendance.php';
     break;
 
   case '/events':
-    $events = getAllEvents();
     $app_content = './app/views/events.php';
     break;
 
   case '/announcements':
-    $announcements = getAllAnnouncements();
     $app_content = './app/views/announcements.php';
     break;
 

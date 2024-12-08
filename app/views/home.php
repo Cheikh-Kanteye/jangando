@@ -156,21 +156,24 @@ $days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     </div>
     <ul>
       <?php $announcements = array_slice(getAllAnnouncements(), 0, 3) ?>
-      <?php foreach ($announcements as $announcement): ?>
-        <li>
-          <div class="row row-between">
-            <h4 class="event-title"><?= htmlspecialchars($announcement['titre']) ?></h4>
-            <small class="badge" style="text-wrap: nowrap;"><?= date('d/m/Y', strtotime($announcement['date'])) ?></small>
-          </div>
-          <p class="event-descrition">
-            <?= htmlspecialchars($announcement['description']) ?>
-          </p>
-        </li>
-      <?php endforeach; ?>
+      <?php if (count($announcements) > 0): ?>
+        <?php foreach ($announcements as $announcement): ?>
+          <li>
+            <div class="row row-between">
+              <h4 class="event-title"><?= htmlspecialchars($announcement['titre']) ?></h4>
+              <small class="badge" style="text-wrap: nowrap;"><?= date('d/m/Y', strtotime($announcement['date'])) ?></small>
+            </div>
+            <p class="event-descrition">
+              <?= htmlspecialchars($announcement['description']) ?>
+            </p>
+          </li>
+        <?php endforeach; ?>
+      <?php endif ?>
     </ul>
   </div>
 </aside>
 
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="./app/assets/js/home.js"></script>
 <script src="./app/assets/js/calendar.js"></script>
+<script src="./app/assets/js/home.js"></script>

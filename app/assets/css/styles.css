@@ -600,7 +600,6 @@ form {
 .subjects_container {
   max-width: 1600px;
   margin: 0 auto;
-  overflow-y: auto;
   height: 80vh;
 }
 
@@ -626,7 +625,7 @@ form {
 
 .subjects_container .cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   padding: 1rem;
 }
@@ -647,6 +646,7 @@ form {
   transform: translateY(-5px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   border-color: #4299e1;
+  cursor: pointer;
 }
 
 .subjects_container .card-icon {
@@ -693,10 +693,6 @@ form {
 /* Large screens (default): 4 columns */
 /* Tablet breakpoint */
 @media (max-width: 1200px) {
-  .subjects_container .cards-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .subjects_container .container {
     max-width: 1200px;
   }
@@ -706,7 +702,6 @@ form {
 @media (max-width: 900px) {
   .subjects_container .cards-grid {
     grid-template-columns: repeat(2, 1fr);
-    /* gap: 1.5rem; */
   }
 
   .subjects_container {
@@ -730,4 +725,43 @@ form {
     height: 60px;
     font-size: 2rem;
   }
+}
+
+.action-form {
+  padding: 0;
+  width: fit-content;
+  background: none;
+}
+
+.custom-alert {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.custom-alert .alert-message {
+  margin-bottom: 15px;
+  font-size: 16px;
+}
+
+.custom-alert .alert-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-alert .alert-button:hover {
+  background-color: #45a049;
 }

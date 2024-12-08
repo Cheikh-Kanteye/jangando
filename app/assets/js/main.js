@@ -63,3 +63,53 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+function showAlert(message) {
+  const alertBox = document.getElementById("customAlert");
+  const alertMessage = document.getElementById("alertMessage");
+
+  alertMessage.textContent = message;
+  alertBox.style.display = "block";
+}
+
+function closeAlert() {
+  const alertBox = document.getElementById("customAlert");
+  alertBox.style.display = "none";
+}
+
+async function deleteStudent(studentId) {
+  if (!confirm("Êtes-vous sûr de vouloir supprimer cet étudiant ?")) return;
+
+  try {
+    const response = await fetch("/database/delete.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: studentId,
+        type: "delete_student",
+      }),
+    });
+
+    // Vérifier si la réponse est OK (status 200)
+    if (!response.ok) {
+      throw new Error(
+        "La requête a échoué avec le statut : " + response.status
+      );
+    }
+
+    const data = await response.json();
+    console.log(data); // Afficher la réponse pour débogage
+
+    if (data.status === "success") {
+      showAlert(data.message);
+      document.querySelector(`tr[data-id='${studentId}']`).remove(); // Supprime la ligne
+    } else {
+      showAlert("Erreur :" + data.message);
+    }
+  } catch (error) {
+    console.error("Erreur :", error);
+    showAlert("Une erreur est survenue lors de la suppression.");
+  }
+}

@@ -27,19 +27,21 @@
     </thead>
     <tbody>
       <?php foreach (getAllStudents() as $student): ?>
-        <?php $grade = getClassById($student["classe_id"]); ?>
-        <tr class="table-row" onclick="navToDetails('<?= $student['id'] ?>', 'students')">
-          <td><?= htmlspecialchars($student['prenom'] . " " . $student['nom']) ?></td>
+        <?php $level = getLevelByID($student["level_id"]); ?>
+        <tr class="table-row" data-id="<?= $student['id'] ?>">
+          <td><?= htmlspecialchars($student['name']) ?></td>
           <td><?= htmlspecialchars($student['id']) ?></td>
-          <td><?= $grade ? $grade["nom"] : "" ?></td>
-          <td><?= htmlspecialchars($student['telephone']) ?></td>
-          <td><?= htmlspecialchars($student['adresse']) ?></td>
+          <td><?= $level ? htmlspecialchars($level["name"]) : "N/A" ?></td> <!-- Utilisation de "name" pour le niveau -->
+          <td><?= htmlspecialchars($student['phone_number']) ?></td>
+          <td><?= htmlspecialchars($student['address']) ?></td>
           <td class="row">
             <button><i class="ri-edit-box-line"></i></button>
-            <button><i class="ri-delete-bin-6-line"></i></button>
+            <button onclick="deleteStudent(<?= $student['id'] ?>)"><i class="ri-delete-bin-6-line"></i></button>
+            </form>
           </td>
         </tr>
-      <?php endforeach ?>
+      <?php endforeach; ?>
+
     </tbody>
   </table>
 </div>
@@ -55,4 +57,9 @@
       <input type="text" name="name" id="name" />
     </div>
   </form>
+</div>
+
+<div class="custom-alert" id="customAlert">
+  <div class="alert-message" id="alertMessage"></div>
+  <button class="alert-button" onclick="closeAlert()">OK</button>
 </div>

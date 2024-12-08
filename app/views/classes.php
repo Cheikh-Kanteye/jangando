@@ -9,5 +9,8 @@
         <span class="hours"><?= $classe["capacite"] ?> students</span>
       </div>
     <?php endforeach ?>
+    <div class="card center" id="add-btn">
+      <div class="card-icon"><i class="ri-add-fill"></i></div>
+    </div>
   </div>
 </div>
