@@ -30,6 +30,7 @@ $grades = new GradeRepository();
 $classes = new ClasseRepository();
 $teachers = new TeacherRepository();
 $events = new EventRepository();
+$parents = new ParentRepository();
 
 $role = $_SESSION['role'];
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -42,7 +43,7 @@ $segments = explode("/", trim($requestUri, "/"));
 if (count($segments) === 2 && !empty($segments[1])) {
   switch ($segments[0]) {
     case 'students':
-      $app_content = './views/student_detail.php';
+      $app_content = './views/student_details.php';
       break;
     case 'teachers':
       $app_content = './views/teacher_details.php';

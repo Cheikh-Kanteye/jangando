@@ -48,6 +48,10 @@ button {
   align-items: start;
 }
 
+.table-row .btn:hover {
+  filter: drop-shadow(0 0 2px rgba(60, 71, 231, 0.61));
+}
+
 .pagination {
   display: flex;
   gap: 10px;
@@ -110,9 +114,9 @@ main {
 }
 
 /* Styles généraux */
-.btn,
 .btn {
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 input,
@@ -307,7 +311,7 @@ main {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -324,6 +328,10 @@ main {
 
 .stats-card:nth-child(odd) {
   background: #c4ebfc;
+}
+
+.stats-card p {
+  font-size: 1rem;
 }
 
 .badge {

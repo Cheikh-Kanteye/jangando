@@ -8,7 +8,7 @@
           <i class="ri-more-fill"></i>
         </button>
       </div>
-      <h4>12</h4>
+      <h4><?= $students->count() ?></h4>
       <p>Student</p>
     </div>
     <div class="stats-card">
@@ -19,7 +19,7 @@
           <i class="ri-more-fill"></i>
         </button>
       </div>
-      <h4>12</h4>
+      <h4><?= $teachers->count() ?></h4>
       <p>Teachers</p>
     </div>
     <div class="stats-card">
@@ -33,17 +33,7 @@
       <h4>12</h4>
       <p>Parents</p>
     </div>
-    <div class="stats-card">
-      <div class="row row-between">
-        <small class="badge">2024/25</small>
 
-        <button>
-          <i class="ri-more-fill"></i>
-        </button>
-      </div>
-      <h4>30</h4>
-      <p>Staffs</p>
-    </div>
   </div>
 
   <div class="diagram-container">

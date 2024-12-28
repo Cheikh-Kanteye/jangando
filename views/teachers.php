@@ -1,10 +1,10 @@
 <?php
-$results_per_page = 10;
-$number_of_results = count($teachers->findAll());
-$number_of_pages = ceil($number_of_results / $results_per_page);
-$current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-$this_page_first_result = ($current_page - 1) * $results_per_page;
-$teachers_list = $teachers->findAllPaginated($this_page_first_result, $results_per_page);
+$resultsPerPage = 10;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$totalResults = count($teachers->findAll());
+
+list($offset, $paginationHtml) = paginate($totalResults, $resultsPerPage, $currentPage, 'teachers');
+$teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
 ?>
 
 <div class="flex-1 table-container">
@@ -36,8 +36,8 @@ $teachers_list = $teachers->findAllPaginated($this_page_first_result, $results_p
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($teachers_list as $teacher): ?>
-        <?php $teacher_subjects = array_slice($teachers->findTeacherWithSubjects($teacher["id"]), 0, 3) ?>
+      <?php foreach ($teachersList as $teacher): ?>
+        <?php $teacherSubjects = array_slice($teachers->findTeacherWithSubjects($teacher["id"]), 0, 3) ?>
         <tr role="link"
           tabindex="0"
           onclick="window.location='/teachers/<?= $teacher['id'] ?>'"
@@ -46,7 +46,7 @@ $teachers_list = $teachers->findAllPaginated($this_page_first_result, $results_p
           <td><?= htmlspecialchars($teacher['id']); ?></td>
           <td>
             <p>
-              <?php foreach ($teacher_subjects as $subject): ?>
+              <?php foreach ($teacherSubjects as $subject): ?>
                 <?php $randomColor = $pastelColors[array_rand($pastelColors)]; ?>
                 <small class="badge" style="background: <?= $randomColor ?>;"><?= $subject["subject_name"] ?></small>
               <?php endforeach ?>
@@ -63,26 +63,6 @@ $teachers_list = $teachers->findAllPaginated($this_page_first_result, $results_p
       <?php endforeach ?>
     </tbody>
   </table>
-  <div class="pagination">
-    <?php for ($page = 1; $page <= $number_of_pages; $page++): ?>
-      <button
-        onclick="window.location.href='teachers?page=<?= $page; ?>'"
-        class="tab <?= $page === $current_page ? 'active' : '' ?>">
-        <span><?= $page; ?></span>
-      </button>
-    <?php endfor; ?>
-  </div>
-</div>
 
-<div class="form-container">
-  <form>
-    <div class="form-group">
-      <label for="firstname">Firstname</label>
-      <input type="text" name="firstname" id="firstname" />
-    </div>
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input type="text" name="name" id="name" />
-    </div>
-  </form>
+  <?= $paginationHtml; ?>
 </div>

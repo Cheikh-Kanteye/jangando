@@ -31,6 +31,16 @@ class ParentRepository
     return $stmt->fetch();
   }
 
+  public function findAllPaginated($offset, $limit)
+  {
+    $sql = "SELECT * FROM Parents LIMIT :limit OFFSET :offset";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function update($id, $data)
   {
     $sql = "UPDATE Parents SET username = :username, name = :name, surname = :surname, email = :email, phone = :phone, address = :address, createdAt = :createdAt 

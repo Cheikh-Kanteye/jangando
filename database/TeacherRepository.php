@@ -16,6 +16,13 @@ class TeacherRepository
     $stmt->execute($data);
   }
 
+  public function count()
+  {
+    $sql = "SELECT COUNT(*) as count FROM Teachers";
+    $stmt = $this->db->query($sql);
+    return $stmt->fetchColumn();
+  }
+
   public function findAll()
   {
     $sql = "SELECT * FROM Teachers";
