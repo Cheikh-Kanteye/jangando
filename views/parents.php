@@ -41,7 +41,7 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
           <td class="row">
             <button class="btn edit-btn"
               data-id="<?= $parent['id'] ?>"
-              data-username="<?= htmlspecialchars($parent['username']) ?>"
+              data-username="<?= htmlspecialchars($parent['id']) ?>"
               data-name="<?= htmlspecialchars($parent['name']) ?>"
               data-surname="<?= htmlspecialchars($parent['surname']) ?>"
               data-email="<?= htmlspecialchars($parent['email']) ?>"

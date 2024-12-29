@@ -30,15 +30,26 @@
       <?php foreach ($students->findAll() as $student): ?>
         <?php $classe = $students->findStudentWithClass($student['id']); ?>
         <tr role="link" tabindex="0" class="table-row" onclick="window.location='/students/<?= $student['id'] ?>'">
-          <td><?= htmlspecialchars($student['surname']) ?> <?= htmlspecialchars($student['name']) ?></td>
+          <td><?= htmlspecialchars($student['name']) ?> <?= htmlspecialchars($student['surname']) ?></td>
           <td><?= htmlspecialchars($student['id']); ?></td>
           <td><?= htmlspecialchars($classe['className']) ?></td>
           <td><?= htmlspecialchars($student['email']); ?></td>
           <td><?= htmlspecialchars($student['phone']); ?></td>
           <td><?= htmlspecialchars($student['address']); ?></td>
           <td class="row" id="actions">
-            <button class="btn"><i class="ri-edit-box-line"></i></button>
-            <a class="btn" href="/delete_students?id=<?= $student['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
+            <button
+              class="btn edit-btn"
+              data-id="<?= $student['id'] ?>"
+              data-name="<?= htmlspecialchars($student['surname']) ?> <?= htmlspecialchars($student['name']) ?>"
+              data-email="<?= htmlspecialchars($student['email']) ?>"
+              data-level="<?= htmlspecialchars($classe['classId']) ?>"
+              data-phone="<?= htmlspecialchars($student['phone']) ?>"
+              <?php $parent = $parents->findById($student['parentId']) ?>
+              data-parent-name="<?= htmlspecialchars($parent['name']) ?>"
+              data-parent-email="<?= htmlspecialchars($parent['email']) ?>"
+              data-parent-phone="<?= htmlspecialchars($parent['phone']) ?>"
+              data-address="<?= htmlspecialchars($student['address']) ?>"><i class="ri-edit-box-line"></i></button>
+            <a class="btn edit-btn" href="/delete_students?id=<?= $student['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -51,6 +62,9 @@
   <form>
     <!-- Informations de l'étudiant -->
     <div class="form-section">
+      <input type="hidden" id="student-id" name="student-id">
+
+
       <h2>Informations de l'étudiant</h2>
 
       <div class="form-group">
@@ -67,6 +81,9 @@
         <label for="level">Niveau</label>
         <select id="level" name="level_id" required>
           <option value="">Sélectionnez un niveau</option>
+          <?php foreach ($classes->findAll() as $classe): ?>
+            <option value="<?= $classe['id'] ?>"><?= $classe['name'] ?></option>
+          <?php endforeach ?>
         </select>
       </div>
 
@@ -109,3 +126,22 @@
   <div class="alert-message" id="alertMessage"></div>
   <button class="btn" onclick="closeAlert()">OK</button>
 </div>
+
+
+<script>
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.querySelector('.form-container').classList.add('show');
+      document.getElementById('student-id').value = this.dataset.id;
+      document.getElementById('name').value = this.dataset.name;
+      document.getElementById('email').value = this.dataset.email;
+      document.getElementById('level').value = this.dataset.level;
+      document.getElementById('phone').value = this.dataset.phone;
+      document.getElementById('parent_name').value = this.dataset.parentName;
+      document.getElementById('parent_email').value = this.dataset.parentEmail;
+      document.getElementById('parent_phone').value = this.dataset.parentPhone;
+      document.getElementById('address').value = this.dataset.address
+    });
+  });
+</script>

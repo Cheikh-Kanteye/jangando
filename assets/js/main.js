@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (formContainer && form) {
     if (addBtn) {
       addBtn.addEventListener("click", () => {
+        form.reset();
         formContainer.classList.add("show");
       });
     } else if (addSubjects.length > 0) {

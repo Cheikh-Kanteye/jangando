@@ -42,7 +42,7 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
           tabindex="0"
           onclick="window.location='/teachers/<?= $teacher['id'] ?>'"
           class="table-row">
-          <td><?= htmlspecialchars($teacher['surname']) ?> <?= htmlspecialchars($teacher['name']) ?></td>
+          <td><?= htmlspecialchars($teacher['name']) ?> <?= htmlspecialchars($teacher['surname']) ?></td>
           <td><?= htmlspecialchars($teacher['id']); ?></td>
           <td>
             <p>
@@ -56,7 +56,19 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
           <td><?= htmlspecialchars($teacher['phone']); ?></td>
           <td><?= htmlspecialchars($teacher['address']); ?></td>
           <td class="row">
-            <button class="btn"><i class="ri-edit-box-line"></i></button>
+            <button
+              class="btn edit-btn"
+              data-id="<?= $teacher['id'] ?>"
+              data-username="<?= htmlspecialchars($teacher['surname']) ?>"
+              data-name="<?= htmlspecialchars($teacher['name']) ?>"
+              data-surname="<?= htmlspecialchars($teacher['surname']) ?>"
+              data-email="<?= htmlspecialchars($teacher['email']) ?>"
+              data-phone="<?= htmlspecialchars($teacher['phone']) ?>"
+              data-address="<?= htmlspecialchars($teacher['address']) ?>"
+              data-bloodtype="<?= htmlspecialchars($teacher['bloodType'] ?? '') ?>"
+              data-birthday="<?= htmlspecialchars($teacher['birthday'] ?? '') ?>">
+              <i class="ri-edit-box-line"></i>
+            </button>
             <a class="btn" href="/delete_teacher?id=<?= $teacher['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
           </td>
         </tr>
@@ -66,3 +78,66 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
 
   <?= $paginationHtml; ?>
 </div>
+<div class="form-container">
+  <form action="/save_teacher" method="post">
+    <input type="hidden" id="teacher-id" name="teacher-id">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+    </div>
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name">
+    </div>
+    <div class="form-group">
+      <label for="surname">Surname:</label>
+      <input type="text" id="surname" name="surname">
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email">
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+      <input type="text" id="phone" name="phone">
+    </div>
+    <div class="form-group">
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address">
+    </div>
+    <div class="form-group">
+      <label for="img">Image:</label>
+      <input type="file" id="img" name="img">
+    </div>
+    <div class="form-group">
+      <label for="bloodType">Blood Type:</label>
+      <input type="text" id="bloodType" name="bloodType">
+    </div>
+    <div class="form-group">
+      <label for="birthday">Birthday:</label>
+      <input type="date" id="birthday" name="birthday">
+    </div>
+    <button type="submit" class="btn">Save</button>
+  </form>
+</div>
+
+
+<script>
+  document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", function(e) {
+      e.stopPropagation();
+      document.querySelector(".form-container").classList.add("show");
+      document.getElementById("teacher-id").value = this.dataset.id;
+      document.getElementById("username").value = this.dataset.username;
+      document.getElementById("name").value = this.dataset.name;
+      document.getElementById("surname").value = this.dataset.surname;
+      document.getElementById("email").value = this.dataset.email;
+      document.getElementById("phone").value = this.dataset.phone;
+      document.getElementById("address").value = this.dataset.address;
+      document.getElementById("bloodType").value = this.dataset.bloodtype || "";
+      const rawDate = this.dataset.birthday || "";
+      const formattedDate = rawDate ? rawDate.split(" ")[0] : "";
+      document.getElementById("birthday").value = formattedDate;
+    });
+  });
+</script>

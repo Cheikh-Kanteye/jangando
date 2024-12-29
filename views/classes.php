@@ -17,11 +17,29 @@
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Department</th>
+        <th>Classname</th>
+        <th>Grade</th>
+        <th>Capacity</th>
+        <th>Supervisor</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
+      <?php foreach ($classes->findAll() as $classe): ?>
+        <tr class="table-row">
+          <td><?= $classe['name'] ?></td>
+          <td><?= $grades->findById($classe['gradeId'])["level"] ?></td>
+          <td></td>
+          <?php $teacher = $teachers->findById($classe['supervisorId']) ?>
+          <td><?= $teacher["surname"] . " " . $teacher["name"] ?></td>
+          <td class="row">
+            <button class="btn edit-btn">
+              <i class="ri-edit-box-line"></i>
+            </button>
+            <a class="btn"><i class="ri-delete-bin-6-line"></i></a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>

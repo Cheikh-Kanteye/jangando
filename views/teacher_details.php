@@ -37,10 +37,34 @@
       </div>
     </div>
     <div class="grid grid-col-2">
-      <div class="diagram">attendance</div>
-      <div class="diagram">grade</div>
-      <div class="diagram">Lessons</div>
-      <div class="diagram">class name</div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleAttendance.png" alt="icon">
+        <div>
+          <h1 class="stats">90%</h1>
+          <p class="text-light">Attendance</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleBranch.png" alt="icon">
+        <div>
+          <h1 class="stats">2</h1>
+          <p class="text-light">Branches</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleLesson.png" alt="icon">
+        <div>
+          <h1 class="stats">6</h1>
+          <p class="text-light">Lessons</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleClass.png" alt="icon">
+        <div>
+          <h1 class="stats">6</h1>
+          <p class="text-light">Classes</p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="diagram">
