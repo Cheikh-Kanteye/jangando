@@ -1,6 +1,6 @@
 <?php
 $routes = [
-  '/' => $_SESSION["role"] === 'admin' ? './views/home.php' : './views/NotAdminHome.php',
+  '/' => strtolower($_SESSION["role"]) === 'admin' ? './views/home.php' : './views/NotAdminHome.php',
   '/students' => './views/students.php',
   '/teachers' => './views/teachers.php',
   '/parents' => './views/parents.php',
@@ -16,4 +16,5 @@ $routes = [
   '/logout' => './views/logout.php',
   '/delete_students' => './database/delete.php',
   '/delete_teacher' => './database/delete.php',
+  '/save_teacher' => './database/save.php',
 ];

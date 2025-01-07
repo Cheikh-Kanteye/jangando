@@ -1,49 +1,96 @@
-<?php $days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; ?>
+<?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+?>
+
+
+<?php
+$entities = $_SESSION["role"] === "student" ? $students : $teachers;
+$data = $entities->findById($_SESSION["username"]);
+$segments[0] = $_SESSION["role"] . "s";
+?>
 
 <section class="home">
-  <h1><?= strtoupper($role) ?></h1>
-</section>
-<aside class="infos">
-  <div class="wrapper infos-card">
-    <div class="row row-between header">
-      <p class="current-date"></p>
-      <div class="row icons">
-        <span id="prev" class="control-btn"><i class="ri-arrow-left-s-line"></i>
-        </span>
-        <span id="next" class="control-btn"><i class="ri-arrow-right-s-line"></i>
-        </span>
+  <div class="user_infos grid grid-col-2">
+    <div class="profile row">
+      <div class="profile_img">
+        <img src="https://i.pravatar.cc/300" alt="student">
+      </div>
+      <div class="details">
+        <h4><?= $data["surname"] . " " . $data["name"] ?></h4>
+        <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedi</p>
+
+        <div>
+          <div class="row">
+            <i class="ri-contrast-drop-2-line"></i>
+            <p><?= $data["bloodType"] ?></p>
+          </div>
+          <div class="row">
+            <i class="ri-calendar-2-line"></i>
+            <p>
+              <?php
+              $date = new DateTime($data["birthday"]);
+              echo $date->format('F d, Y');
+              ?>
+            </p>
+          </div>
+
+          <div class="row">
+            <i class="ri-mail-line"></i>
+            <p><?= $data["email"] ?></p>
+          </div>
+          <div class="row">
+            <i class="ri-phone-line"></i>
+            <p><?= $data["phone"] ?></p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="calendar">
-      <ul class="weeks">
-        <?php foreach ($days as $day): ?>
-          <li><?= $day ?></li>
-        <?php endforeach ?>
-      </ul>
-      <ul class="days"></ul>
+    <div class="grid grid-col-2">
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleAttendance.png" alt="icon">
+        <div>
+          <h1 class="stats">90%</h1>
+          <p class="text-light">Attendance</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleBranch.png" alt="icon">
+        <div>
+          <h1 class="stats">2</h1>
+          <p class="text-light">Branches</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleLesson.png" alt="icon">
+        <div>
+          <h1 class="stats">6</h1>
+          <p class="text-light">Lessons</p>
+        </div>
+      </div>
+      <div class="diagram row items-start">
+        <img src="/assets/images/singleClass.png" alt="icon">
+        <div>
+          <h1 class="stats">6</h1>
+          <p class="text-light">Classes</p>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="diagram">
+    <h2>Schedule (GL2)</h2>
+    <?php $schedule = $classes->findById($data["classId"])["schedule"] ?? []; ?>
+    <div id="big-calendar"
+      data-events="<?= htmlspecialchars(json_encode($schedule)) ?>"></div>
 
-  <div class="events infos-card">
-    <div class="row row-between">
-      <h2>Events</h2>
-      <button>
-        <i class="ri-more-fill"></i>
-      </button>
-    </div>
-    <ul>
-    </ul>
   </div>
+</section>
 
-  <div class="annoucements infos-card">
-    <div class="row row-between">
-      <h2>Annoucements</h2>
-      <small>View All</small>
-    </div>
-    <ul>
-    </ul>
-  </div>
-</aside>
+<?php require_once "./partials/InfosSidebar.php" ?>
 
-<script src="./app/assets/js/calendar.js"></script>
+
+<script src="/assets/js/calendar.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+<script src="/assets/js/big-calendar.js"></script>

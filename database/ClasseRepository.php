@@ -1,34 +1,11 @@
 <?php
-class ClasseRepository
-{
-  private $db;
+require_once 'BaseRepository.php';
 
+class ClasseRepository extends BaseRepository
+{
   public function __construct()
   {
-    $this->db = DatabaseConnection::getInstance()->getConnection();
-  }
-
-  public function create($data)
-  {
-    $sql = "INSERT INTO Classes (id, name, capacity, supervisorId, gradeId) 
-                VALUES (:id, :name, :capacity, :supervisorId, :gradeId)";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($data);
-  }
-
-  public function findAll()
-  {
-    $sql = "SELECT * FROM Classes";
-    $stmt = $this->db->query($sql);
-    return $stmt->fetchAll();
-  }
-
-  public function findById($id)
-  {
-    $sql = "SELECT * FROM Classes WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
+    parent::__construct('Classes');
   }
 
   public function findByIDWithGrade($id)
@@ -40,20 +17,5 @@ class ClasseRepository
     $stmt = $this->db->prepare($sql);
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
-  }
-
-  public function update($id, $data)
-  {
-    $sql = "UPDATE Classes SET name = :name, capacity = :capacity, supervisorId = :supervisorId, gradeId = :gradeId 
-                WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(array_merge(['id' => $id], $data));
-  }
-
-  public function delete($id)
-  {
-    $sql = "DELETE FROM Classes WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
   }
 }

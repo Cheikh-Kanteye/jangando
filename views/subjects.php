@@ -1,51 +1,77 @@
-<div class="subjects_container">
-  <div class="departments">
-    <!-- <?php $departments = $records->getDepartmentsWithSubjects(); ?>
-    <?php foreach ($departments as $departmentName => $subjects): ?>
-      <div class="department">
-        <h2><?= $departmentName ?></h2>
-        <ul class="course-list">
-          <?php foreach ($subjects as $subject): ?>
-            <li class="course">
-              <h3><?= $subject['subject_name'] ?></h3>
-              <p><?= $subject['code'] ?> - <?= $subject['credits'] ?> crédits</p>
-            </li>
-          <?php endforeach; ?>
-          <li class="course add-items add-subjects-btn">
-            <i class="ri-add-circle-line"></i>
-          </li>
-        </ul>
+<?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+
+$resultsPerPage = 10;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$totalResults = count($subjects->findAll());
+
+list($offset, $paginationHtml) = paginate($totalResults, $resultsPerPage, $currentPage, 'subjects');
+$subjectsList = $subjects->findAllPaginated($offset, $resultsPerPage);
+?>
+
+<div class="flex-1 table-container animate-fade-in">
+  <div class="row row-between">
+    <h2>All Subjects</h2>
+    <div class="row">
+      <div class="row search-input">
+        <i class="ri-search-line"></i>
+        <input type="text" placeholder="Search..." name="search" id="search" />
       </div>
-    <?php endforeach; ?> -->
+      <button class="btn"><i class="ri-equalizer-line"></i></button>
+      <button class="btn"><i class="ri-sort-desc"></i></button>
+      <button type="button" class="add-btn btn">
+        <i class="ri-add-line"></i>
+      </button>
+    </div>
   </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($subjectsList as $subject): ?>
+        <tr class="table-row">
+          <td><?= htmlspecialchars($subject['id']) ?></td>
+          <td><?= htmlspecialchars($subject['name']) ?></td>
+          <td class="row">
+            <button class="btn edit-btn"
+              data-id="<?= $subject['id'] ?>"
+              data-name="<?= htmlspecialchars($subject['name']) ?>">
+              <i class="ri-edit-box-line"></i>
+            </button>
+            <button class="btn"><i class="ri-delete-bin-6-line"></i></button>
+          </td>
+        </tr>
+      <?php endforeach  ?>
+    </tbody>
+  </table>
 </div>
 
-<div class="form-container">
-  <form>
-    <!-- Sélection du département -->
+<div class="form-container animate-scale-in">
+  <form method="post" action="save_subject.php" id="subject-form">
+    <input type="hidden" name="id" id="subject-id" />
     <div class="form-group">
-      <label for="department">Département</label>
-      <select id="department" name="department_id" required>
-        <option value="">Sélectionnez un département</option>
-      </select>
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" />
     </div>
-
-    <!-- Informations du sujet -->
-    <div class="form-group">
-      <label for="subject_name">Nom du sujet</label>
-      <input type="text" id="subject_name" name="name">
-    </div>
-
-    <div class="form-group">
-      <label for="code">Code</label>
-      <input type="text" id="code" name="code">
-    </div>
-
-    <div class="form-group">
-      <label for="credits">Crédits</label>
-      <input type="number" id="credits" name="credits" min="1">
-    </div>
-
-    <button class="btn" type="submit">Ajouter le sujet</button>
+    <button type="submit" class="btn">Save</button>
   </form>
 </div>
+
+<script>
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      document.querySelector(".form-container").classList.add("show")
+      document.getElementById('subject-id').value = this.dataset.id;
+      document.getElementById('name').value = this.dataset.name;
+    });
+  });
+</script>

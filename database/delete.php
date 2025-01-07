@@ -8,7 +8,7 @@ switch ($requestUri) {
     break;
   case '/delete_teacher':
     $teachers = new TeacherRepository();
-    $teachers->delete($_GET['id']);
+    $teachers->deleteTeacher($_GET['id']);
     break;
 
   default:

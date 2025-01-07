@@ -1,3 +1,11 @@
+<?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+?>
+
+
 <?php $teacher = $teachers->findById($segments[1]); ?>
 
 <section class="home">

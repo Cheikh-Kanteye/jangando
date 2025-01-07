@@ -1,4 +1,19 @@
-<div class="flex-1 table-container">
+<?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+
+$resultsPerPage = 10;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$totalResults = count($parents->findAll());
+
+list($offset, $paginationHtml) = paginate($totalResults, $resultsPerPage, $currentPage, 'students');
+$studentsList = $students->findAllPaginated($offset, $resultsPerPage);
+?>
+
+
+<div class="flex-1 table-container animate-fade-in">
   <div class="row row-between">
     <h2>All Students</h2>
     <div class="row">
@@ -27,7 +42,7 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($students->findAll() as $student): ?>
+      <?php foreach ($studentsList as $student): ?>
         <?php $classe = $students->findStudentWithClass($student['id']); ?>
         <tr role="link" tabindex="0" class="table-row" onclick="window.location='/students/<?= $student['id'] ?>'">
           <td><?= htmlspecialchars($student['name']) ?> <?= htmlspecialchars($student['surname']) ?></td>
@@ -56,9 +71,11 @@
     </tbody>
 
   </table>
+
+  <?= $paginationHtml; ?>
 </div>
 
-<div class="form-container">
+<div class="form-container animate-scale-in">
   <form>
     <!-- Informations de l'étudiant -->
     <div class="form-section">

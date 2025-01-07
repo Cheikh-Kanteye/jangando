@@ -1,48 +1,20 @@
 <?php
-class LessonRepository
+class LessonRepository extends BaseRepository
 {
-  private $db;
-
   public function __construct()
   {
-    $this->db = DatabaseConnection::getInstance()->getConnection();
+    parent::__construct('Lessons');
   }
 
-  public function create($data)
+
+  public function findByTeacherId($teacherId)
   {
-    $sql = "INSERT INTO Lessons (id, name, day, startTime, endTime, subjectId, classId, teacherId) 
-                VALUES (:id, :name, :day, :startTime, :endTime, :subjectId, :classId, :teacherId)";
+    $sql = "SELECT lessons.*, teachers.name as teacher_name, teachers.email as teacher_email 
+            FROM {$this->table} as lessons
+            JOIN teachers ON lessons.teacherId = teachers.id
+            WHERE lessons.teacherId = :teacherId";
     $stmt = $this->db->prepare($sql);
-    $stmt->execute($data);
-  }
-
-  public function findAll()
-  {
-    $sql = "SELECT * FROM Lessons";
-    $stmt = $this->db->query($sql);
-    return $stmt->fetchAll();
-  }
-
-  public function findById($id)
-  {
-    $sql = "SELECT * FROM Lessons WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetch();
-  }
-
-  public function update($id, $data)
-  {
-    $sql = "UPDATE Lessons SET name = :name, day = :day, startTime = :startTime, endTime = :endTime, 
-                subjectId = :subjectId, classId = :classId, teacherId = :teacherId WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(array_merge(['id' => $id], $data));
-  }
-
-  public function delete($id)
-  {
-    $sql = "DELETE FROM Lessons WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
+    $stmt->execute(['teacherId' => $teacherId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 }

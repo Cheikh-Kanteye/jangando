@@ -1,4 +1,12 @@
-<div class="flex-1 table-container">
+<?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+?>
+
+
+<div class="flex-1 table-container animate-fade-in">
   <div class="row row-between">
     <h2>All Classes</h2>
     <div class="row">
@@ -29,9 +37,8 @@
         <tr class="table-row">
           <td><?= $classe['name'] ?></td>
           <td><?= $grades->findById($classe['gradeId'])["level"] ?></td>
+          <td><?= $classe["capacity"] ?></td>
           <td></td>
-          <?php $teacher = $teachers->findById($classe['supervisorId']) ?>
-          <td><?= $teacher["surname"] . " " . $teacher["name"] ?></td>
           <td class="row">
             <button class="btn edit-btn">
               <i class="ri-edit-box-line"></i>
@@ -44,7 +51,7 @@
   </table>
 </div>
 
-<div class="form-container">
+<div class="form-container animate-scale-in">
   <form>
     <div class="form-group">
       <label for="firstname">Firstname</label>

@@ -1,34 +1,97 @@
 <?php
-class TeacherRepository
+class TeacherRepository extends BaseRepository
 {
-  private $db;
+  private $usersRepository;
+
+  private function displayMessage($message)
+  {
+    echo "<script>alert('$message')</script>";
+    echo "<script>window.location='/teachers'</script>";
+    exit;
+  }
 
   public function __construct()
   {
-    $this->db = DatabaseConnection::getInstance()->getConnection();
+    parent::__construct('Teachers');
+    $this->usersRepository = new UsersRepository();
   }
 
-  public function create($data)
+
+  public function createTeacher($data)
   {
-    $sql = "INSERT INTO Teachers (id, username, name, surname, email, phone, address, img, bloodType, sex, createdAt, birthday) 
-                VALUES (:id, :username, :name, :surname, :email, :phone, :address, :img, :bloodType, :sex, :createdAt, :birthday)";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute($data);
+    try {
+      // Création de l'utilisateur avec UserRepository
+      $password = password_hash("passer123", PASSWORD_BCRYPT);
+
+      $userData = [
+        'username' => $data['username'],
+        'password' => $password,
+        'role' => 'teacher',
+      ];
+
+      $userId = $this->usersRepository->create($userData);
+      var_dump("User created with ID: " . $userId); // Vérification de la création de l'user
+
+      // Gestion de l'image
+      if (isset($_FILES['img'])) {
+        $uploadResult = uploadImage($_FILES['img']);
+
+        if (isset($uploadResult['success'])) {
+          $imgPath = $uploadResult['success'];
+        } else {
+          var_dump($uploadResult); // Afficher l'erreur si l'image n'est pas téléchargée
+          return $uploadResult; // Retourner l'erreur si l'image n'est pas téléchargée
+        }
+      } else {
+        $imgPath = null;
+      }
+
+      // Création des données du professeur
+      $teacherData = [
+        'id' => generateUniqueId($data['name'], $data['surname'], date('YmdHis')),
+        'user_id' => $userId,
+        'name' => $data['name'],
+        'surname' => $data['surname'],
+        'email' => $data['email'],
+        'phone' => $data['phone'],
+        'address' => $data['address'],
+        'img' => $imgPath,
+        'bloodType' => $data['bloodType'],
+        'sex' => 'male',
+        'birthday' => $data['birthday'],
+      ];
+
+      // Insertion du professeur avec PDO
+      $teacherQuery = "INSERT INTO Teachers (id,user_id, name, surname, email, phone, address, img, bloodType, sex, birthday) 
+                        VALUES (:id, :user_id, :name, :surname, :email, :phone, :address, :img, :bloodType, :sex, :birthday)";
+      $stmt = $this->db->prepare($teacherQuery);
+      $stmt->bindParam(':id', $teacherData['id']);
+      $stmt->bindParam(':user_id', $teacherData['user_id']);
+      $stmt->bindParam(':name', $teacherData['name']);
+      $stmt->bindParam(':surname', $teacherData['surname']);
+      $stmt->bindParam(':email', $teacherData['email']);
+      $stmt->bindParam(':phone', $teacherData['phone']);
+      $stmt->bindParam(':address', $teacherData['address']);
+      $stmt->bindParam(':img', $teacherData['img']);
+      $stmt->bindParam(':bloodType', $teacherData['bloodType']);
+      $stmt->bindParam(':sex', $teacherData['sex']);
+      $stmt->bindParam(':birthday', $teacherData['birthday']);
+
+      if (!$stmt->execute()) {
+        throw new Exception("Erreur lors de la création du professeur.");
+      }
+
+      $teacherId = $this->db->lastInsertId();
+      $this->displayMessage("teacher created with ID: " . $teacherId);
+    } catch (PDOException $e) {
+      $this->displayMessage("PDO Exception: " . $e->getMessage());
+    } catch (Exception $e) {
+      $this->displayMessage("General Exception: " . $e->getMessage());
+    }
   }
 
-  public function count()
-  {
-    $sql = "SELECT COUNT(*) as count FROM Teachers";
-    $stmt = $this->db->query($sql);
-    return $stmt->fetchColumn();
-  }
 
-  public function findAll()
-  {
-    $sql = "SELECT * FROM Teachers";
-    $stmt = $this->db->query($sql);
-    return $stmt->fetchAll();
-  }
+
 
   public function findTeacherWithSubjects($id)
   {
@@ -41,43 +104,50 @@ class TeacherRepository
     $stmt = $this->db->prepare($sql);
     $stmt->execute(['id' => $id]);
 
-    // Retourner toutes les matières de l'enseignant
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function findById($id)
+  public function deleteTeacher($teacherId)
   {
-    $sql = "SELECT * FROM Teachers WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetch();
-  }
+    try {
+      // Find the teacher's user_id
+      $sql = "SELECT user_id FROM Teachers WHERE id = :teacherId";
+      $stmt = $this->db->prepare($sql);
+      $stmt->execute(['teacherId' => $teacherId]);
+      $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  public function update($id, $data)
-  {
-    $sql = "UPDATE Teachers SET username = :username, name = :name, surname = :surname, email = :email, phone = :phone, address = :address, img = :img, bloodType = :bloodType, sex = :sex, createdAt = :createdAt, birthday = :birthday 
-                WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(array_merge(['id' => $id], $data));
-  }
+      if (!$teacher) {
+        throw new Exception("Teacher not found.");
+      }
 
-  public function delete($id)
-  {
-    $sql = "DELETE FROM Teachers WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
+      $userId = $teacher['user_id'];
 
-    echo "<script>alert('Supprimé avec succés'); window.location.href='/teachers'</script>";
-  }
+      // Delete from teacher_subjects
+      $sql = "DELETE FROM teacher_subjects WHERE teacher_id = :teacherId";
+      $stmt = $this->db->prepare($sql);
+      if (!$stmt->execute(['teacherId' => $teacherId])) {
+        throw new Exception("Error deleting from teacher_subjects.");
+      }
 
+      // Delete the teacher
+      $sql = "DELETE FROM Teachers WHERE id = :teacherId";
+      $stmt = $this->db->prepare($sql);
+      if (!$stmt->execute(['teacherId' => $teacherId])) {
+        throw new Exception("Error deleting teacher.");
+      }
 
-  public function findAllPaginated($offset, $limit)
-  {
-    $sql = "SELECT * FROM Teachers LIMIT :limit OFFSET :offset";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      // Delete the user
+      if (!$this->usersRepository->delete($userId)) {
+        throw new Exception("Error deleting user.");
+      }
+
+      return true;
+    } catch (PDOException $e) {
+      $this->displayMessage("PDO Exception: " . $e->getMessage());
+      return false;
+    } catch (Exception $e) {
+      $this->displayMessage("General Exception: " . $e->getMessage());
+      return false;
+    }
   }
 }

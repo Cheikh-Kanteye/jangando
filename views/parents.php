@@ -1,4 +1,9 @@
 <?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+
 $resultsPerPage = 10;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $totalResults = count($parents->findAll());
@@ -7,7 +12,7 @@ list($offset, $paginationHtml) = paginate($totalResults, $resultsPerPage, $curre
 $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
 ?>
 
-<div class="flex-1 table-container">
+<div class="flex-1 table-container animate-fade-in">
   <div class="row row-between">
     <h2>All Parents</h2>
     <div class="row">
@@ -57,7 +62,7 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
   </table>
 </div>
 
-<div class="form-container">
+<div class="form-container animate-scale-in">
   <form method="post" action="save_parent.php" id="parent-form">
     <input type="hidden" name="id" id="parent-id" />
     <div class="form-group">

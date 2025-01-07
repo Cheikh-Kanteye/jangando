@@ -1,46 +1,18 @@
 <?php
-class AdminRepository
-{
-  private $db;
+require_once 'BaseRepository.php';
 
+class AdminRepository extends BaseRepository
+{
   public function __construct()
   {
-    $this->db = DatabaseConnection::getInstance()->getConnection();
+    parent::__construct('Admins');
   }
 
-  public function create($id, $username)
+  public function findByUsername($username)
   {
-    $sql = "INSERT INTO Admins (id, username) VALUES (:id, :username)";
+    $sql = "SELECT * FROM {$this->table} WHERE username = :username";
     $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id, 'username' => $username]);
-  }
-
-  public function findAll()
-  {
-    $sql = "SELECT * FROM Admins";
-    $stmt = $this->db->query($sql);
-    return $stmt->fetchAll();
-  }
-
-  public function findById($id)
-  {
-    $sql = "SELECT * FROM Admins WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
-    return $stmt->fetch();
-  }
-
-  public function update($id, $username)
-  {
-    $sql = "UPDATE Admins SET username = :username WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id, 'username' => $username]);
-  }
-
-  public function delete($id)
-  {
-    $sql = "DELETE FROM Admins WHERE id = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute(['id' => $id]);
+    $stmt->execute(['username' => $username]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
   }
 }

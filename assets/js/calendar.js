@@ -22,6 +22,8 @@ const months = [
 ];
 
 const renderCalendar = () => {
+  if (!days) return;
+
   let firstDayofMonth = new Date(currentYear, currentMonth, 1).getDay();
   let lastDateofMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   let lastDayofMonth = new Date(

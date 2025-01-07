@@ -3,11 +3,14 @@ require_once "./includes/functions.php";
 
 session_start();
 checkSession();
+define('APP_ACCESS', true);
 
 
 require_once "./assets/utils/dummy.php";
 require_once "./includes/routes.php";
 require_once "./database/DatabaseConnection.php";
+require_once "./database/BaseRepository.php";
+require_once "./database/UsersRepository.php";
 require_once "./database/StudentRepository.php";
 require_once "./database/ParentRepository.php";
 require_once "./database/ClasseRepository.php";
@@ -31,11 +34,14 @@ $classes = new ClasseRepository();
 $teachers = new TeacherRepository();
 $events = new EventRepository();
 $parents = new ParentRepository();
+$subjects = new SubjectRepository();
+$exams = new ExamRepository();
+$assigments = new AssignmentRepository();
+
 
 $role = $_SESSION['role'];
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $segments = explode("/", trim($requestUri, "/"));
-
 
 // var_dump($segments);
 

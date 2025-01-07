@@ -1,4 +1,9 @@
 <?php
+if (!defined('APP_ACCESS')) {
+  header("Location: /");
+  exit;
+}
+
 $resultsPerPage = 10;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $totalResults = count($teachers->findAll());
@@ -7,7 +12,7 @@ list($offset, $paginationHtml) = paginate($totalResults, $resultsPerPage, $curre
 $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
 ?>
 
-<div class="flex-1 table-container">
+<div class="flex-1 table-container animate-fade-in">
   <div class="row row-between">
     <h2>All Teachers</h2>
     <div class="row">
@@ -27,7 +32,6 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
     <thead>
       <tr>
         <th>Info</th>
-        <th>Teacher ID</th>
         <th>Subjects</th>
         <th>Classes</th>
         <th>Phone</th>
@@ -43,7 +47,6 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
           onclick="window.location='/teachers/<?= $teacher['id'] ?>'"
           class="table-row">
           <td><?= htmlspecialchars($teacher['name']) ?> <?= htmlspecialchars($teacher['surname']) ?></td>
-          <td><?= htmlspecialchars($teacher['id']); ?></td>
           <td>
             <p>
               <?php foreach ($teacherSubjects as $subject): ?>
@@ -78,7 +81,7 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
 
   <?= $paginationHtml; ?>
 </div>
-<div class="form-container">
+<div class="form-container animate-scale-in">
   <form action="/save_teacher" method="post">
     <input type="hidden" id="teacher-id" name="teacher-id">
     <div class="form-group">

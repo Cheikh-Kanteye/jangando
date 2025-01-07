@@ -1,27 +1,13 @@
 <?php
+require_once "./database/UsersRepository.php";
+$users = new UsersRepository();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
   $password = $_POST['password'];
 
-  // Replace this with your actual user retrieval logic (e.g., from a database)
-  $users = [
-    ['username' => 'teacher', 'password' => password_hash('teacher_password', PASSWORD_DEFAULT), 'role' => 'teacher'],
-    ['username' => 'admin', 'password' => password_hash('admin_password', PASSWORD_DEFAULT), 'role' => 'admin'],
-    ['username' => 'student', 'password' => password_hash('student_password', PASSWORD_DEFAULT), 'role' => 'student'],
-  ];
+  $user = $users->login($username, $password);
 
-  $user = null;
-
-  // Check if the username exists and verify the password
-  foreach ($users as $u) {
-    if ($u['username'] === $username && password_verify($password, $u['password'])) {
-      $user = $u;
-      break;
-    }
-  }
-
-  // If user is found, set session variables and redirect
   if ($user != null) {
     $_SESSION['role'] = $user['role'];
     $_SESSION['username'] = $username;
@@ -31,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error = "Identifiants incorrects.";
   }
 }
+
 ?>
 
 
