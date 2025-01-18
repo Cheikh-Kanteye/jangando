@@ -7,4 +7,8 @@ switch ($requestUri) {
     $teacher = new TeacherRepository();
     $teacher->createTeacher($_POST);
     break;
+  case "/update_teacher":
+    $teacher = new TeacherRepository();
+    $teacher->update(intval($_GET["id"]), $_POST);
+    break;
 }

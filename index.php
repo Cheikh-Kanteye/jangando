@@ -1,31 +1,11 @@
 <?php
-require_once "./includes/functions.php";
-
 session_start();
+
+require_once "./autoload.php";
+
+
 checkSession();
 define('APP_ACCESS', true);
-
-
-require_once "./assets/utils/dummy.php";
-require_once "./includes/routes.php";
-require_once "./database/DatabaseConnection.php";
-require_once "./database/BaseRepository.php";
-require_once "./database/UsersRepository.php";
-require_once "./database/StudentRepository.php";
-require_once "./database/ParentRepository.php";
-require_once "./database/ClasseRepository.php";
-require_once "./database/GradeRepository.php";
-require_once "./database/GradeRepository.php";
-require_once "./database/SubjectRepository.php";
-require_once "./database/TeacherRepository.php";
-require_once "./database/AttendanceRepository.php";
-require_once "./database/ExamRepository.php";
-require_once "./database/AssignmentRepository.php";
-require_once "./database/LessonRepository.php";
-require_once "./database/EventRepository.php";
-
-
-
 
 
 $students =  new StudentRepository();

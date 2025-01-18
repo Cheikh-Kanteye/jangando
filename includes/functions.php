@@ -85,3 +85,56 @@ function generateUniqueId($name, $surname, $otherData)
 
   return $uniqueId;
 }
+
+function renderDiagramItem($iconPath, $stat, $label)
+{
+?>
+  <div class="diagram row items-start">
+    <img src="<?= htmlspecialchars($iconPath) ?>" alt="icon">
+    <div>
+      <h1 class="stats"><?= htmlspecialchars($stat) ?></h1>
+      <p class="text-light"><?= htmlspecialchars($label) ?></p>
+    </div>
+  </div>
+<?php
+}
+
+
+function renderProfile($data)
+{
+?>
+  <div class="profile row">
+    <div class="profile_img">
+      <img src="https://i.pravatar.cc/300" alt="student">
+    </div>
+    <div class="details">
+      <h4><?= htmlspecialchars($data["surname"] . " " . $data["name"]) ?></h4>
+      <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedi</p>
+
+      <div>
+        <div class="row">
+          <i class="ri-contrast-drop-2-line"></i>
+          <p><?= htmlspecialchars($data["bloodType"]) ?></p>
+        </div>
+        <div class="row">
+          <i class="ri-calendar-2-line"></i>
+          <p>
+            <?php
+            $date = new DateTime($data["birthday"]);
+            echo $date->format('F d, Y');
+            ?>
+          </p>
+        </div>
+        <div class="row">
+          <i class="ri-mail-line"></i>
+          <p><?= htmlspecialchars($data["email"]) ?></p>
+        </div>
+        <div class="row">
+          <i class="ri-phone-line"></i>
+          <p><?= htmlspecialchars($data["phone"]) ?></p>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+}

@@ -107,6 +107,34 @@ class TeacherRepository extends BaseRepository
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function findTeacherWithClasses($id)
+  {
+    // Fetch teacher information
+    $teacherSql = "SELECT * FROM Teachers WHERE id = :id";
+    $teacherStmt = $this->db->prepare($teacherSql);
+    $teacherStmt->execute(['id' => $id]);
+    $teacher = $teacherStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$teacher) {
+      throw new Exception("Teacher not found.");
+    }
+
+    // Fetch classes associated with the teacher
+    $classesSql = "SELECT c.*
+                   FROM teacher_classe tc
+                   JOIN classes c ON tc.classe_id = c.id
+                   WHERE tc.teacher_id = :id";
+    $classesStmt = $this->db->prepare($classesSql);
+    $classesStmt->execute(['id' => $id]);
+    $classes = $classesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Combine teacher information with classes
+    $teacher['classes'] = $classes;
+
+    return $teacher;
+  }
+
+
   public function deleteTeacher($teacherId)
   {
     try {

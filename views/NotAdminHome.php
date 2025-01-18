@@ -3,94 +3,58 @@ if (!defined('APP_ACCESS')) {
   header("Location: /");
   exit;
 }
-?>
 
+if ($_SESSION["role"] === "student") {
+  $data = $students->findById($_SESSION["username"]);
+  $schedule = $data["schedule"] ?? [];
+} else {
+  $data = $teachers->findTeacherWithClasses($_SESSION["username"]);
+  $classes = $data["classes"] ?? [];
+}
 
-<?php
-$entities = $_SESSION["role"] === "student" ? $students : $teachers;
-$data = $entities->findById($_SESSION["username"]);
 $segments[0] = $_SESSION["role"] . "s";
 ?>
 
-<section class="home">
+<section class="home" style="height: fit-content;">
   <div class="user_infos grid grid-col-2">
-    <div class="profile row">
-      <div class="profile_img">
-        <img src="https://i.pravatar.cc/300" alt="student">
-      </div>
-      <div class="details">
-        <h4><?= $data["surname"] . " " . $data["name"] ?></h4>
-        <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Impedi</p>
-
-        <div>
-          <div class="row">
-            <i class="ri-contrast-drop-2-line"></i>
-            <p><?= $data["bloodType"] ?></p>
-          </div>
-          <div class="row">
-            <i class="ri-calendar-2-line"></i>
-            <p>
-              <?php
-              $date = new DateTime($data["birthday"]);
-              echo $date->format('F d, Y');
-              ?>
-            </p>
-          </div>
-
-          <div class="row">
-            <i class="ri-mail-line"></i>
-            <p><?= $data["email"] ?></p>
-          </div>
-          <div class="row">
-            <i class="ri-phone-line"></i>
-            <p><?= $data["phone"] ?></p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?php renderProfile($data) ?>
     <div class="grid grid-col-2">
-      <div class="diagram row items-start">
-        <img src="/assets/images/singleAttendance.png" alt="icon">
-        <div>
-          <h1 class="stats">90%</h1>
-          <p class="text-light">Attendance</p>
-        </div>
-      </div>
-      <div class="diagram row items-start">
-        <img src="/assets/images/singleBranch.png" alt="icon">
-        <div>
-          <h1 class="stats">2</h1>
-          <p class="text-light">Branches</p>
-        </div>
-      </div>
-      <div class="diagram row items-start">
-        <img src="/assets/images/singleLesson.png" alt="icon">
-        <div>
-          <h1 class="stats">6</h1>
-          <p class="text-light">Lessons</p>
-        </div>
-      </div>
-      <div class="diagram row items-start">
-        <img src="/assets/images/singleClass.png" alt="icon">
-        <div>
-          <h1 class="stats">6</h1>
-          <p class="text-light">Classes</p>
-        </div>
-      </div>
+      <?php
+      renderDiagramItem("/assets/images/singleAttendance.png", "90%", "Attendance");
+      renderDiagramItem("/assets/images/singleBranch.png", "2", "Branches");
+      renderDiagramItem("/assets/images/singleLesson.png", "6", "Lessons");
+      renderDiagramItem("/assets/images/singleClass.png", "6", "Classes");
+      ?>
     </div>
   </div>
-  <div class="diagram">
-    <h2>Schedule (GL2)</h2>
-    <?php $schedule = $classes->findById($data["classId"])["schedule"] ?? []; ?>
-    <div id="big-calendar"
-      data-events="<?= htmlspecialchars(json_encode($schedule)) ?>"></div>
 
-  </div>
+  <?php require_once "./includes/schedule.php" ?>
 </section>
 
-<?php require_once "./partials/InfosSidebar.php" ?>
+<?php require_once "./partials/InfosSidebar.php"; ?>
 
-
-<script src="/assets/js/calendar.js"></script>
+<script src="/assets/js/schedule.js"></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
-<script src="/assets/js/big-calendar.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabs = document.querySelectorAll(".tab-button");
+    const panels = document.querySelectorAll(".tab-panel");
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        // Désactiver tous les onglets et panels
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => {
+          p.classList.remove("active");
+          p.style.zIndex = 0;
+        });
+
+        // Activer l'onglet et le panel courant
+        tab.classList.add("active");
+        const panel = document.querySelector(`.tab-panel[data-tab-index="${index}"]`);
+        panel.classList.add("active");
+        panel.style.zIndex = 10;
+      });
+    });
+  });
+</script>

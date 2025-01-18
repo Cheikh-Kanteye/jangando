@@ -69,6 +69,7 @@ abstract class BaseRepository
 
     $sql = "UPDATE {$this->table} SET $setClause WHERE id = :id";
     $stmt = $this->db->prepare($sql);
+    var_dump($data);
     $stmt->execute(array_merge(['id' => $id], $data));
   }
 

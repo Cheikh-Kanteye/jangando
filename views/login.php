@@ -2,6 +2,8 @@
 require_once "./database/UsersRepository.php";
 $users = new UsersRepository();
 
+// echo password_hash("passer123", PASSWORD_BCRYPT);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $username = $_POST['username'];
   $password = $_POST['password'];
@@ -17,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error = "Identifiants incorrects.";
   }
 }
+
 
 ?>
 

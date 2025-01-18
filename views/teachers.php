@@ -141,6 +141,7 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
       const rawDate = this.dataset.birthday || "";
       const formattedDate = rawDate ? rawDate.split(" ")[0] : "";
       document.getElementById("birthday").value = formattedDate;
+      document.querySelector("form").setAttribute("action", `/update_teacher?id=${this.dataset.id}`)
     });
   });
 </script>
