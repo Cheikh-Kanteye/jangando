@@ -19,7 +19,7 @@ $exams = new ExamRepository();
 $assigments = new AssignmentRepository();
 
 
-$role = $_SESSION['role'];
+$role = $_SESSION['user']["role"];
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $segments = explode("/", trim($requestUri, "/"));
 

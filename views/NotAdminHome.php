@@ -5,14 +5,14 @@ if (!defined('APP_ACCESS')) {
 }
 
 if ($_SESSION["role"] === "student") {
-  $data = $students->findById($_SESSION["username"]);
+  $data = $students->findById($_SESSION["user"]["username"]);
   $schedule = $data["schedule"] ?? [];
 } else {
-  $data = $teachers->findTeacherWithClasses($_SESSION["username"]);
+  $data = $teachers->findTeacherWithClasses($_SESSION["user"]["username"]);
   $classes = $data["classes"] ?? [];
 }
 
-$segments[0] = $_SESSION["role"] . "s";
+$segments[0] = $_SESSION["user"]["role"] . "s";
 ?>
 
 <section class="home" style="height: fit-content;">

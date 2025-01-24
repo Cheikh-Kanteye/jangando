@@ -15,6 +15,7 @@ $routes = [
   '/delete_students' => './database/delete.php',
   '/delete_teacher' => './database/delete.php',
   '/save_teacher' => './database/save.php',
+  '/save_parent' => './database/save.php',
   '/update_teacher' => './database/save.php',
   '/edit-schedule' => './views/edit-schedule.php',
 ];

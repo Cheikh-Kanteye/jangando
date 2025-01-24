@@ -1,3 +1,7 @@
+<?php
+$users = new UsersRepository();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +57,7 @@
           <button><i class="ri-notification-3-line"></i></button>
           <div class="row profile">
             <div>
-              <h5>John Doe</h5>
+              <h5><?= $users->findById($_SESSION["user"]["id"])["username"] ?></h5>
               <small><?= $role ?></small>
             </div>
             <div class="img">

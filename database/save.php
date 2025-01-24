@@ -11,4 +11,7 @@ switch ($requestUri) {
     $teacher = new TeacherRepository();
     $teacher->update(intval($_GET["id"]), $_POST);
     break;
+  case "/save_parent":
+    $parent = new ParentRepository();
+    $parent->createParent($_POST);
 }

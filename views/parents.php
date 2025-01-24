@@ -63,7 +63,7 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
 </div>
 
 <div class="form-container animate-scale-in">
-  <form method="post" action="save_parent.php" id="parent-form">
+  <form method="post" action="/save_parent" id="parent-form">
     <input type="hidden" name="id" id="parent-id" />
     <div class="form-group">
       <label for="username">Username</label>

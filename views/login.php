@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if ($user != null) {
     $_SESSION['role'] = $user['role'];
-    $_SESSION['username'] = $username;
+    $_SESSION['user'] = $user;
     header("Location: /");
     exit;
   } else {
