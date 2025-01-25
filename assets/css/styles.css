@@ -539,7 +539,7 @@ th {
   resize: vertical;
 }
 
-form {
+.form-container form {
   max-width: 600px;
   padding: 16px;
   background: var(--color-bg-light);

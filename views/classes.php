@@ -14,9 +14,9 @@ if (!defined('APP_ACCESS')) {
         <i class="ri-search-line"></i>
         <input type="text" placeholder="Search..." name="search" id="search" />
       </div>
-      <button><i class="ri-equalizer-line"></i></button>
-      <button><i class="ri-sort-desc"></i></button>
-      <button type="button" class="add-btn">
+      <button class="btn"><i class="ri-equalizer-line"></i></button>
+      <button class="btn"><i class="ri-sort-desc"></i></button>
+      <button type="button" class="btn add-btn">
         <i class="ri-add-line"></i>
       </button>
     </div>

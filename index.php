@@ -19,7 +19,8 @@ $exams = new ExamRepository();
 $assigments = new AssignmentRepository();
 
 
-$role = $_SESSION['user']["role"];
+$role = strtolower($_SESSION['user']["role"]);
+$isAdmin = $role == "admin";
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $segments = explode("/", trim($requestUri, "/"));
 

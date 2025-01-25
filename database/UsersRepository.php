@@ -36,21 +36,4 @@ class UsersRepository extends BaseRepository
       return null;
     }
   }
-
-  public function displayMessage($message)
-  {
-    echo "<script>alert('$message')</script>";
-    echo "<script>window.location='/teachers'</script>";
-    exit;
-  }
-
-  public function hashPassword($password)
-  {
-    return password_hash($password, PASSWORD_BCRYPT);
-  }
-
-  public function generateUniqueId($name, $surname)
-  {
-    return generateUniqueId($name, $surname, date('YmdHis'));
-  }
 }

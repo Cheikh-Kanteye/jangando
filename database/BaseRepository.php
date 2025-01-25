@@ -53,15 +53,37 @@ abstract class BaseRepository
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function findAllPaginated($offset, $limit)
+  public function findAllPaginated($offset, $limit, $search = null)
   {
-    $sql = "SELECT * FROM {$this->table} LIMIT :limit OFFSET :offset";
+    // Début de la requête
+    $sql = "SELECT * FROM {$this->table}";
+
+    // Ajouter une clause WHERE si un terme de recherche est fourni
+    if (!empty($search)) {
+      $sql .= " WHERE title LIKE :search";
+    }
+
+    // Ajouter la pagination
+    $sql .= " LIMIT :limit OFFSET :offset";
+
     $stmt = $this->db->prepare($sql);
+
+    // Lier les paramètres de pagination
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+
+    // Lier le paramètre de recherche si nécessaire
+    if (!empty($search)) {
+      $search = "%{$search}%";
+      $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+    }
+
+    // Exécuter la requête
     $stmt->execute();
+
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
 
   public function update($id, array $data)
   {
@@ -85,5 +107,22 @@ abstract class BaseRepository
     $sql = "SELECT COUNT(*) as count FROM {$this->table}";
     $stmt = $this->db->query($sql);
     return $stmt->fetchColumn();
+  }
+
+  public function displayMessage($message)
+  {
+    echo "<script>alert('$message')</script>";
+    echo "<script>window.location='/teachers'</script>";
+    exit;
+  }
+
+  public function hashPassword($password)
+  {
+    return password_hash($password, PASSWORD_BCRYPT);
+  }
+
+  public function generateUniqueId($name, $surname)
+  {
+    return generateUniqueId($name, $surname, date('YmdHis'));
   }
 }
