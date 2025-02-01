@@ -22,9 +22,11 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
       </div>
       <button class="btn"><i class="ri-equalizer-line"></i></button>
       <button class="btn"><i class="ri-sort-desc"></i></button>
-      <button type="button" class="add-btn btn">
-        <i class="ri-add-line"></i>
-      </button>
+      <?php if ($role == "admin"): ?>
+        <button type="button" class="add-btn btn">
+          <i class="ri-add-line"></i>
+        </button>
+      <?php endif ?>
     </div>
   </div>
 
@@ -34,7 +36,7 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
         <th>Info</th>
         <th>Email</th>
         <th>Telephone</th>
-        <th>Actions</th>
+        <?php if ($role == "admin"): ?><th>Actions</th><?php endif ?>
       </tr>
     </thead>
     <tbody>
@@ -43,19 +45,21 @@ $parentsList = $parents->findAllPaginated($offset, $resultsPerPage);
           <td><?= htmlspecialchars($parent['surname']) ?> <?= htmlspecialchars($parent['name']) ?></td>
           <td><?= htmlspecialchars($parent['email']) ?></td>
           <td><?= htmlspecialchars($parent['phone']) ?></td>
-          <td class="row">
-            <button class="btn edit-btn"
-              data-id="<?= $parent['id'] ?>"
-              data-username="<?= htmlspecialchars($parent['id']) ?>"
-              data-name="<?= htmlspecialchars($parent['name']) ?>"
-              data-surname="<?= htmlspecialchars($parent['surname']) ?>"
-              data-email="<?= htmlspecialchars($parent['email']) ?>"
-              data-phone="<?= htmlspecialchars($parent['phone']) ?>"
-              data-address="<?= htmlspecialchars($parent['address']) ?>">
-              <i class="ri-edit-box-line"></i>
-            </button>
-            <button class="btn"><i class="ri-delete-bin-6-line"></i></button>
-          </td>
+          <?php if ($role == "admin"): ?>
+            <td class="row">
+              <button class="btn edit-btn"
+                data-id="<?= $parent['id'] ?>"
+                data-username="<?= htmlspecialchars($parent['id']) ?>"
+                data-name="<?= htmlspecialchars($parent['name']) ?>"
+                data-surname="<?= htmlspecialchars($parent['surname']) ?>"
+                data-email="<?= htmlspecialchars($parent['email']) ?>"
+                data-phone="<?= htmlspecialchars($parent['phone']) ?>"
+                data-address="<?= htmlspecialchars($parent['address']) ?>">
+                <i class="ri-edit-box-line"></i>
+              </button>
+              <button class="btn"><i class="ri-delete-bin-6-line"></i></button>
+            </td>
+          <?php endif ?>
         </tr>
       <?php endforeach  ?>
     </tbody>

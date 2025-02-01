@@ -16,7 +16,7 @@ $menuItems = [
     "href" => "/teachers",
     "icon" => "ri-presentation-line",
     "text" => "Teachers",
-    "authorized" => ["ADMIN", "TEACHER"],
+    "authorized" => ["ADMIN"],
   ],
   [
     "href" => "/parents",

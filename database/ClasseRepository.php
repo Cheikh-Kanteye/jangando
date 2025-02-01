@@ -18,4 +18,12 @@ class ClasseRepository extends BaseRepository
     $stmt->execute(['id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
+
+  public function getSupervisor($supervisor_id)
+  {
+    $sql = "SELECT * FROM teachers WHERE id = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(["id" => $supervisor_id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+  }
 }

@@ -22,9 +22,11 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
       </div>
       <button class="btn"><i class="ri-equalizer-line"></i></button>
       <button class="btn"><i class="ri-sort-desc"></i></button>
-      <button type="button" class="add-btn btn">
-        <i class="ri-add-line"></i>
-      </button>
+      <?php if ($role == "admin"): ?>
+        <button type="button" class="add-btn btn">
+          <i class="ri-add-line"></i>
+        </button>
+      <?php endif ?>
     </div>
   </div>
 
@@ -36,7 +38,7 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
         <th>Classes</th>
         <th>Phone</th>
         <th>Address</th>
-        <th>Actions</th>
+        <?php if ($role == "admin"): ?> actions <?php endif ?>
       </tr>
     </thead>
     <tbody>
@@ -58,22 +60,24 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
           <td><?= htmlspecialchars($teacher['email']); ?></td>
           <td><?= htmlspecialchars($teacher['phone']); ?></td>
           <td><?= htmlspecialchars($teacher['address']); ?></td>
-          <td class="row">
-            <button
-              class="btn edit-btn"
-              data-id="<?= $teacher['id'] ?>"
-              data-username="<?= htmlspecialchars($teacher['surname']) ?>"
-              data-name="<?= htmlspecialchars($teacher['name']) ?>"
-              data-surname="<?= htmlspecialchars($teacher['surname']) ?>"
-              data-email="<?= htmlspecialchars($teacher['email']) ?>"
-              data-phone="<?= htmlspecialchars($teacher['phone']) ?>"
-              data-address="<?= htmlspecialchars($teacher['address']) ?>"
-              data-bloodtype="<?= htmlspecialchars($teacher['bloodType'] ?? '') ?>"
-              data-birthday="<?= htmlspecialchars($teacher['birthday'] ?? '') ?>">
-              <i class="ri-edit-box-line"></i>
-            </button>
-            <a class="btn" href="/delete_teacher?id=<?= $teacher['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
-          </td>
+          <?php if ($role == "admin") : ?>
+            <td class="row">
+              <button
+                class="btn edit-btn"
+                data-id="<?= $teacher['id'] ?>"
+                data-username="<?= htmlspecialchars($teacher['surname']) ?>"
+                data-name="<?= htmlspecialchars($teacher['name']) ?>"
+                data-surname="<?= htmlspecialchars($teacher['surname']) ?>"
+                data-email="<?= htmlspecialchars($teacher['email']) ?>"
+                data-phone="<?= htmlspecialchars($teacher['phone']) ?>"
+                data-address="<?= htmlspecialchars($teacher['address']) ?>"
+                data-bloodtype="<?= htmlspecialchars($teacher['bloodType'] ?? '') ?>"
+                data-birthday="<?= htmlspecialchars($teacher['birthday'] ?? '') ?>">
+                <i class="ri-edit-box-line"></i>
+              </button>
+              <a class="btn" href="/delete_teacher?id=<?= $teacher['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
+            </td>
+          <?php endif ?>
         </tr>
       <?php endforeach ?>
     </tbody>
