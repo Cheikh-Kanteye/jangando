@@ -5,10 +5,10 @@ $users = new UsersRepository();
 // echo password_hash("passer123", PASSWORD_BCRYPT);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $username = $_POST['username'];
+  $email = $_POST['email'];
   $password = $_POST['password'];
 
-  $user = $users->login($username, $password);
+  $user = $users->login($email, $password);
 
   if ($user != null) {
     $_SESSION['role'] = $user['role'];
@@ -40,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form class="login-form" method="POST">
       <h2>Login</h2>
       <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>

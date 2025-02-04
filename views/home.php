@@ -38,7 +38,7 @@ if (!defined('APP_ACCESS')) {
           <i class="ri-more-fill"></i>
         </button>
       </div>
-      <h4>12</h4>
+      <h4><?= $parents->count() ?></h4>
       <p>Parents</p>
     </div>
 

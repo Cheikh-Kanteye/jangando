@@ -38,7 +38,7 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
         <th>Classes</th>
         <th>Phone</th>
         <th>Address</th>
-        <?php if ($role == "admin"): ?> actions <?php endif ?>
+        <?php if ($role == "admin"): ?> <th>actions</th> <?php endif ?>
       </tr>
     </thead>
     <tbody>
@@ -65,7 +65,6 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
               <button
                 class="btn edit-btn"
                 data-id="<?= $teacher['id'] ?>"
-                data-username="<?= htmlspecialchars($teacher['surname']) ?>"
                 data-name="<?= htmlspecialchars($teacher['name']) ?>"
                 data-surname="<?= htmlspecialchars($teacher['surname']) ?>"
                 data-email="<?= htmlspecialchars($teacher['email']) ?>"
@@ -86,19 +85,15 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
   <?= $paginationHtml; ?>
 </div>
 <div class="form-container animate-scale-in">
-  <form action="/save_teacher" method="post">
+  <form action="/save_teacher" method="post" enctype="multipart/form-data">
     <input type="hidden" id="teacher-id" name="teacher-id">
     <div class="form-group">
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username">
-    </div>
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name">
-    </div>
-    <div class="form-group">
-      <label for="surname">Surname:</label>
+      <label for="surname">First name:</label>
       <input type="text" id="surname" name="surname">
+    </div>
+    <div class="form-group">
+      <label for="name">Last name:</label>
+      <input type="text" id="name" name="name">
     </div>
     <div class="form-group">
       <label for="email">Email:</label>
@@ -135,7 +130,6 @@ $teachersList = $teachers->findAllPaginated($offset, $resultsPerPage);
       e.stopPropagation();
       document.querySelector(".form-container").classList.add("show");
       document.getElementById("teacher-id").value = this.dataset.id;
-      document.getElementById("username").value = this.dataset.username;
       document.getElementById("name").value = this.dataset.name;
       document.getElementById("surname").value = this.dataset.surname;
       document.getElementById("email").value = this.dataset.email;

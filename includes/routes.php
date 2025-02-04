@@ -18,4 +18,7 @@ $routes = [
   '/save_parent' => './database/save.php',
   '/update_teacher' => './database/save.php',
   '/edit-schedule' => './views/edit-schedule.php',
+  '/update_subject' => './database/save.php',
+  '/update_classe' => './database/save.php',
+  '/save_classe' => './database/save.php',
 ];

@@ -29,13 +29,28 @@ abstract class BaseRepository
 
       return null;
     } catch (PDOException $e) {
-      var_dump("PDO Exception: " . $e->getMessage());
-      return null;
+      if (
+        strpos($e->getMessage(), 'teachers.email') !== false ||
+        strpos($e->getMessage(), 'students.email') !== false ||
+        strpos($e->getMessage(), 'parents.email') !== false
+      ) {
+        throw new Exception('Erreur : L\'email est déjà utilisé.');
+      } elseif (
+        strpos($e->getMessage(), 'teachers.phone') !== false ||
+        strpos($e->getMessage(), 'students.phone') !== false ||
+        strpos($e->getMessage(), 'parents.phone') !== false
+      ) {
+        throw new Exception('Erreur : Le numéro de téléphone est déjà utilisé.');
+      } elseif (strpos($e->getMessage(), 'users.username') !== false) {
+        throw new Exception('Erreur : Le nom d\'utilisateur est déjà pris.');
+      } else {
+        throw new Exception('Erreur de duplication non spécifiée.');
+      }
     } catch (Exception $e) {
-      var_dump("General Exception: " . $e->getMessage());
-      return null;
+      throw new Exception('General Exception: ' . $e->getMessage());
     }
   }
+
 
 
   public function findById($id)
@@ -91,7 +106,7 @@ abstract class BaseRepository
 
     $sql = "UPDATE {$this->table} SET $setClause WHERE id = :id";
     $stmt = $this->db->prepare($sql);
-    var_dump($data);
+    // var_dump($data);
     $stmt->execute(array_merge(['id' => $id], $data));
   }
 

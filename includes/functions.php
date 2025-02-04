@@ -53,7 +53,7 @@ function uploadImage($file)
     return ['error' => 'Le fichier est trop volumineux. La taille maximale est de 5 Mo.'];
   }
 
-  $uploadDir = 'assets/images/';
+  $uploadDir = 'assets/images/uploads';
   if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0777, true);
   }
@@ -98,7 +98,7 @@ function renderProfile($data)
 ?>
   <div class="profile row">
     <div class="profile_img">
-      <img src="https://i.pravatar.cc/300" alt="student">
+      <img src="/<?= $data['img'] ?>" alt="student">
     </div>
     <div class="details">
       <h4><?= htmlspecialchars($data["surname"] . " " . $data["name"]) ?></h4>

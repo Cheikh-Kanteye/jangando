@@ -48,27 +48,28 @@ $studentsList = $students->findAllPaginated($offset, $resultsPerPage);
     <tbody>
       <?php foreach ($studentsList as $student): ?>
         <?php $classe = $students->findStudentWithClass($student['id']); ?>
+
         <tr role="link" tabindex="0" class="table-row" onclick="window.location='/students/<?= $student['id'] ?>'">
-          <td><?= htmlspecialchars($student['name']) ?> <?= htmlspecialchars($student['surname']) ?></td>
-          <td><?= htmlspecialchars($student['id']); ?></td>
-          <td><?= htmlspecialchars($classe['className']) ?></td>
-          <td><?= htmlspecialchars($student['email']); ?></td>
-          <td><?= htmlspecialchars($student['phone']); ?></td>
-          <td><?= htmlspecialchars($student['address']); ?></td>
+          <td><?= $student['name'] ?> <?= ($student['surname']) ?></td>
+          <td><?= $student['id']; ?></td>
+          <td><?= $classe["className"] ?></td>
+          <td><?= $student['email']; ?></td>
+          <td><?= $student['phone']; ?></td>
+          <td><?= $student['address']; ?></td>
           <?php if ($role == "admin"): ?>
             <td class="row" id="actions">
               <button
                 class="btn edit-btn"
                 data-id="<?= $student['id'] ?>"
-                data-name="<?= htmlspecialchars($student['surname']) ?> <?= htmlspecialchars($student['name']) ?>"
-                data-email="<?= htmlspecialchars($student['email']) ?>"
-                data-level="<?= htmlspecialchars($classe['classId']) ?>"
-                data-phone="<?= htmlspecialchars($student['phone']) ?>"
+                data-name="<?= $student['surname'] ?> <?= $student['name'] ?>"
+                data-email="<?= $student['email'] ?>"
+                data-level="<?= $student['classId'] ?>"
+                data-phone="<?= $student['phone'] ?>"
                 <?php $parent = $parents->findById($student['parentId']) ?>
-                data-parent-name="<?= htmlspecialchars($parent['name']) ?>"
-                data-parent-email="<?= htmlspecialchars($parent['email']) ?>"
-                data-parent-phone="<?= htmlspecialchars($parent['phone']) ?>"
-                data-address="<?= htmlspecialchars($student['address']) ?>"><i class="ri-edit-box-line"></i></button>
+                data-parent-name="<?= $parent['name'] ?>"
+                data-parent-email="<?= $parent['email'] ?>"
+                data-parent-phone="<?= $parent['phone'] ?>"
+                data-address="<?= $student['address'] ?>"><i class="ri-edit-box-line"></i></button>
               <a class="btn edit-btn" href="/delete_students?id=<?= $student['id'] ?>"><i class="ri-delete-bin-6-line"></i></a>
             </td>
           <?php endif ?>

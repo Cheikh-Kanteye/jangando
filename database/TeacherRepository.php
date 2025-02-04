@@ -12,11 +12,15 @@ class TeacherRepository extends BaseRepository
   public function createTeacher($data)
   {
     try {
-      $userId = $this->createUser($data['username']);
-      $imgPath = $this->handleImageUpload();
+      $userId = $this->usersRepository->createUser($data, "teacher");
+      $imgPath = $this->usersRepository->handleImageUpload();
       $teacherData = $this->prepareTeacherData($data, $userId, $imgPath);
-      $this->insertTeacher($teacherData);
-      $this->usersRepository->displayMessage("Teacher created with ID: " . $teacherData['id']);
+      $isCreated = $this->create($teacherData);
+      if ($isCreated != null) {
+        $this->usersRepository->displayMessage("Teacher created with ID: " . $teacherData['id']);
+      } else {
+        $this->usersRepository->delete($userId);
+      }
     } catch (PDOException $e) {
       $this->usersRepository->displayMessage("PDO Exception: " . $e->getMessage());
     } catch (Exception $e) {
@@ -24,30 +28,6 @@ class TeacherRepository extends BaseRepository
     }
   }
 
-  private function createUser($username)
-  {
-    $password = password_hash("passer123", PASSWORD_BCRYPT);
-    $userData = [
-      'username' => $username,
-      'password' => $password,
-      'role' => 'teacher',
-    ];
-    return $this->usersRepository->create($userData);
-  }
-
-  private function handleImageUpload()
-  {
-    if (isset($_FILES['img'])) {
-      $uploadResult = uploadImage($_FILES['img']);
-      if (isset($uploadResult['success'])) {
-        return $uploadResult['success'];
-      } else {
-        var_dump($uploadResult);
-        throw new Exception("Image upload failed.");
-      }
-    }
-    return null;
-  }
 
   private function prepareTeacherData($data, $userId, $imgPath)
   {
@@ -64,21 +44,6 @@ class TeacherRepository extends BaseRepository
       'sex' => 'male',
       'birthday' => $data['birthday'],
     ];
-  }
-
-  private function insertTeacher($teacherData)
-  {
-    $teacherQuery =
-      "INSERT INTO Teachers (id, user_id, name, surname, email, phone, address, img, bloodType, sex, birthday) 
-      VALUES (:id, :user_id, :name, :surname, :email, :phone, :address, :img, :bloodType, :sex, :birthday)";
-
-    $stmt = $this->db->prepare($teacherQuery);
-    foreach ($teacherData as $key => $value) {
-      $stmt->bindValue(':' . $key, $value);
-    }
-    if (!$stmt->execute()) {
-      throw new Exception("Error creating teacher.");
-    }
   }
 
   public function findTeacherWithSubjects($id)
@@ -103,7 +68,9 @@ class TeacherRepository extends BaseRepository
 
   private function fetchTeacher($id)
   {
-    $sql = "SELECT * FROM Teachers WHERE id = :id";
+    // var_dump($id);
+    // die();
+    $sql = "SELECT * FROM Teachers WHERE user_id = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->execute(['id' => $id]);
     $teacher = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -136,7 +103,7 @@ class TeacherRepository extends BaseRepository
       $this->usersRepository->displayMessage("PDO Exception: " . $e->getMessage());
       return false;
     } catch (Exception $e) {
-      $this->usersRepository->displayMessage("General Exception: " . $e->getMessage());
+      $this->usersRepository->displayMessage("General Exception: $teacherId, " . $e->getMessage());
       return false;
     }
   }

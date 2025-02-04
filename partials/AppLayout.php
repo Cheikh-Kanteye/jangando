@@ -12,7 +12,7 @@ $users = new UsersRepository();
   <link
     href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
     rel="stylesheet" />
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
   <!-- Utilisation de chemins absolus pour les fichiers CSS -->
   <link rel="stylesheet" href="/assets/css/calendar.css" />
   <link rel="stylesheet" href="/assets/css/schedule.css" />
@@ -57,7 +57,7 @@ $users = new UsersRepository();
           <button><i class="ri-notification-3-line"></i></button>
           <div class="row profile">
             <div>
-              <h5><?= $users->findById($_SESSION["user"]["id"])["username"] ?></h5>
+              <h5><?= explode('@', $users->findById($_SESSION["user"]["id"])["username"])[0] ?></h5>
               <small><?= $role ?></small>
             </div>
             <div class="img">

@@ -4,11 +4,12 @@ if (!defined('APP_ACCESS')) {
   exit;
 }
 
+
 if ($_SESSION["role"] === "student") {
-  $data = $students->findById($_SESSION["user"]["username"]);
+  $data = $students->findByEmail($_SESSION["user"]["username"]);
   $schedule = $data["schedule"] ?? [];
 } else {
-  $data = $teachers->findTeacherWithClasses($_SESSION["user"]["username"]);
+  $data = $teachers->findTeacherWithClasses($_SESSION["user"]["id"]);
   $classes = $data["classes"] ?? [];
 }
 

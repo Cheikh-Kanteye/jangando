@@ -56,7 +56,7 @@ $subjectsList = $subjects->findAllPaginated($offset, $resultsPerPage);
 </div>
 
 <div class="form-container animate-scale-in">
-  <form method="post" action="save_subject.php" id="subject-form">
+  <form method="post" action="/save_subject" id="subject-form">
     <input type="hidden" name="id" id="subject-id" />
     <div class="form-group">
       <label for="name">Name</label>
@@ -72,6 +72,7 @@ $subjectsList = $subjects->findAllPaginated($offset, $resultsPerPage);
       document.querySelector(".form-container").classList.add("show")
       document.getElementById('subject-id').value = this.dataset.id;
       document.getElementById('name').value = this.dataset.name;
+      document.querySelector("form").setAttribute("action", `/update_subject?id=${this.dataset.id}`)
     });
   });
 </script>
